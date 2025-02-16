@@ -75,7 +75,7 @@ def splitpool(setitems,d):
     return setitems
 
 def searchsolution(d):
-    N=0
+    N=0  # счеитчик решений
     if len(d)==0: return "set is empty"
     for set1 in select5items(d): # Выбираем первые 5  дающих 10  ку  ( первый ряд)
         fset1 = splitpool(set1,d) # удаляем  первый ряд из набора
@@ -101,10 +101,10 @@ def searchsolution(d):
                 print(set3)
                 # for s in set3: # кажется 3 ряд возвращать не надо ибо мы его не вынимали
                 #     d.add(s)
-                for s in set2:
+                for s in set2: #возвращаем обратно в пул 2 ряд
                     d.add(s)
                 continue
 
-        for s in set1:
+        for s in set1:#  #возвращаем обратно в пул 1 ряд
             d.add(s)
 
