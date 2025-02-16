@@ -50,7 +50,8 @@ def sum5options(p1:Piece,p2:Piece,p3:Piece,p4:Piece,p5:Piece):
 
 def select5items(d):
     """
-    последовательно  возвращает все выборки по 5 фишек из заданного набора.  но только при условии что они в сумму могут дать 10(!)
+    последовательно  возвращает все выборки по 5 фишек из заданного набора.
+    но только при условии,  что они в сумму могут дать 10(!)
     :param d:
     :return: set из 5 фишек
     """
@@ -62,32 +63,34 @@ def select5items(d):
             yield i
 
 def splitpool(setitems,d):
-    # print(setitems)
-    # print(f"{len(d)}:d={d}")
-
+    """
+    удаляет из набора d items setitems
+    :param setitems:
+    :param d:
+    :return:
+    """
     for i in setitems:
-        assert  i in d, f" {i}not  in {d}"
+        assert  i in d, f" {i} not  in {d}"
         d.remove(i)
     return setitems
 
 def searchsolution(d):
     N=0
     if len(d)==0: return "set is empty"
-    for set1 in select5items(d):
-        # print(f"set1 ={set1}")
-        fset1 = splitpool(set1,d)
-        # print(f" осталоаьс1 {len(d)}")
+    for set1 in select5items(d): # Выбираем первые 5  дающих 10  ку  ( первый ряд)
+        fset1 = splitpool(set1,d) # удаляем  первый ряд из набора
+        # print(f" осталоаьс1 {len(d)}") #todo Conver to logger
         # print(f"Fset1 ={fset1}")
-        for set2 in select5items(d):
-            fset2 = splitpool(set2, d)
+        for set2 in select5items(d):  # из оставшихся выбираем 2 ряд дающий 10
+            fset2 = splitpool(set2, d) # Удалвем из набора 2 ряд
             # print(f"set2 = {set2}")
             # print(f" осталоаьс2 {len(d)}")
 
-            assert len(d) == 5
-            set3 = sum5options(*d)
+            assert len(d) == 5  # должно остатться только 5 фишек
+            set3 = sum5options(*d)    # проверяем  дают ли оставшиеся 5 фишек 10 ку
             # print(f"set3 = {set3}")
-            if set3 == None:
-                for s in set2:
+            if set3 == None:   # не дают
+                for s in set2: # возвращаем обратно в пул 2 ряд
                     d.add(s)
                 continue
             else:
@@ -96,8 +99,8 @@ def searchsolution(d):
                 print(set1)
                 print(set2)
                 print(set3)
-                for s in set3:
-                    d.add(s)
+                # for s in set3: # кажется 3 ряд возвращать не надо ибо мы его не вынимали
+                #     d.add(s)
                 for s in set2:
                     d.add(s)
                 continue
