@@ -1,12 +1,25 @@
 from domino import operations
 
 def test_createpiece():
+    """
+    Тестирует функцию createpeice из модуля operations.
+
+    Проверяет, что функция createpeice генерирует 15 уникальных фишек.
+    Выводит каждую фишку и проверяет количество сгенерированных фишек.
+    """
+
     for n,r in  enumerate(operations.createpeice()):
         print(r)
     assert n == 14 # должно получиться 15 элементов
 
 
 def test_createset():
+    """
+        Тестирует функцию createset из модуля operations.
+
+        Проверяет, что функция createset создаёт полный набор из 15 уникальных фишек.
+        Выводит весь набор и проверяет его размер.
+        """
     d = operations.createset()
     print(d)
     assert len(d) == 15
@@ -14,11 +27,21 @@ def test_createset():
 
 
 def test_sum4():
+    """
+     Тестирует функцию sum5 из модуля operations.
+
+     Проверяет, что функция sum5 корректно суммирует значения фишек.
+     Создаёт набор из 5 фишек, вычисляет их сумму и выводит результат.
+     Повторяет тест для перевёрнутых фишек и выводит результат.
+     """
     d = operations.createset()
     m=[]
-    for i in range(5):
-        m.append(d.pop())
-    s = operations.sum5(*m)
+    # for i in range(5):
+    #     m.append(d.pop())
+    from itertools import  combinations
+    m = combinations(d,5)
+    m1 = next(m)
+    s = operations.sum5(*m1)
     print(m)
     print(s)
     m = []
