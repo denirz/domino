@@ -1,5 +1,24 @@
 from domino.pieces import Piece
-from itertools import permutations
+from itertools import permutations,combinations
+import logging
+
+# Setup logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# Create console handler and set level to debug
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+
+# Create formatter
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+# Add formatter to ch
+ch.setFormatter(formatter)
+
+# Add ch to logger
+logger.addHandler(ch)
+
 def createpeice():
     """ Итератор - создает последовательно все фишки"""
     for i in range(1,7):
@@ -55,9 +74,10 @@ def select5items(d):
     :param d:
     :return: set из 5 фишек
     """
-    s = permutations(d,5)
-    # todo  кажется что  тут возращаются еще и разнве перестановки а нам они не нужны. навернео есть более удачный вариант  permutation
-    # это сильно скорит  работу
+    # s = permutations(d,5)
+    # кажется,  что  тут возращаются еще и разнве перестановки а нам они не нужны. навернео есть более удачный вариант  permutation
+    # это сильно скорит  работу - теперь находим тольуо 211 вариантов.  что кстати подозрительно
+    s = combinations(d,5)
     for i in s:
         if sum5options(*i):
             yield i
@@ -75,20 +95,21 @@ def splitpool(setitems,d):
     return setitems
 
 def searchsolution(d):
+    "Собственно поиск самих решений "
     N=0  # счеитчик решений
     if len(d)==0: return "set is empty"
     for set1 in select5items(d): # Выбираем первые 5  дающих 10  ку  ( первый ряд)
         fset1 = splitpool(set1,d) # удаляем  первый ряд из набора
-        # print(f" осталоаьс1 {len(d)}") #todo Conver to logger
-        # print(f"Fset1 ={fset1}")
+        logger.debug(f" осталоcь 1 {len(d)}")
+        logger.debug(f"Fset1 ={fset1}")
         for set2 in select5items(d):  # из оставшихся выбираем 2 ряд дающий 10
             fset2 = splitpool(set2, d) # Удалвем из набора 2 ряд
-            # print(f"set2 = {set2}")
-            # print(f" осталоаьс2 {len(d)}")
+            logger.debug(f"set2 = {set2}")
+            logger.debug(f" осталоcь 2 {len(d)}")
 
             assert len(d) == 5  # должно остатться только 5 фишек
             set3 = sum5options(*d)    # проверяем  дают ли оставшиеся 5 фишек 10 ку
-            # print(f"set3 = {set3}")
+            logger.debug(f"set3 = {set3}")
             if set3 == None:   # не дают
                 for s in set2: # возвращаем обратно в пул 2 ряд
                     d.add(s)
